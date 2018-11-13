@@ -98,31 +98,16 @@ class BinarySearchTree {
 function main() {
   let bst = new BinarySearchTree();
 
-  let newItems = [3, 1, 2];
+  let newItems = [10, 5, 6, 4, 20, 7, 30, 50, 67, 89, 109];
   newItems.forEach(item => bst.insert(item));
-
-  // function height(root, max=0) {
-  //     let count = 0;
-
-  //     if(this.left) {
-  //         count = count + 1;
-  //         this = this.left;
-  //         height(this);
-  //     }
-  //     else if (this.right) {
-
-  //     }
-  // }
 
   function height(node) {
     if (!node) return 0;
     let leftHeight = height(node.left);
     let rightHeight = height(node.right);
-    console.log(rightHeight);
 
     return Math.max(leftHeight, rightHeight) + 1;
   }
-  //  console.log(height(bst));
 
   let testBST = new BinarySearchTree();
   let test2 = new BinarySearchTree();
@@ -152,7 +137,64 @@ function main() {
     }
   }
 
-  console.log(isItBST(testBST));
+  //   console.log(isItBST(testBST));
+
+  function findMax(bst) {
+    if (!bst.right) {
+      return bst;
+    } else {
+      return findMax(bst.right);
+    }
+  }
+
+  function thirdLargest(bst) {
+    let ourBST = bst;
+    let max = findMax(ourBST);
+    ourBST.remove(max.key);
+    let max2 = findMax(ourBST);
+    ourBST.remove(max2.key);
+    let solution = findMax(ourBST);
+    return solution.key;
+  }
+
+  function balanced(bst) {
+    let left = height(bst.left);
+    let right = height(bst.right);
+    if (Math.abs(left - right) > 1) {
+      return false;
+    } else {
+      return;
+    }
+  }
+  // console.log(balanced(bst));
+
+  function balancedBST(bst) {
+    if (balanced(bst) === false) {
+      return false;
+    }
+    if (balanced(bst) !== false) {
+      if (bst.left && bst.right) {
+        return balancedBST(bst.left), balancedBST(bst.right);
+      } else if (bst.left) {
+        let child = bst.left;
+        if (child.right || child.left) {
+          return false;
+        } else {
+          return true;
+        }
+      } else if (bst.right) {
+        let child = bst.right;
+        if (child.right || child.left) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+  }
+  return balancedBST(bst);
 }
 
 console.log(main());
